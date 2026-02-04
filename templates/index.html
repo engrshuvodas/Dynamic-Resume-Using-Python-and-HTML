@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h3 class="gradient-text">Hello, I'm</h3>
+        <h1 style="font-size: 4rem; line-height: 1.1;">{{ personal.name }}</h1>
+        <h2 style="color: var(--gray);">{{ personal.title }}</h2>
+        <p style="font-size: 1.2rem; margin: 1.5rem 0; color: var(--gray);">
+            {{ personal.summary }}
+        </p>
+        <div style="display: flex; gap: 1rem;">
+            <a href="{{ url_for('document') }}" class="btn btn-primary">View Full Resume</a>
+            <a href="mailto:{{ personal.email }}" class="btn" style="border: 1px solid var(--glass-border);">Contact
+                Me</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <i class="fas fa-user-tie"></i>
+    </div>
+</section>
+
+<section id="skills">
+    <h2 class="gradient-text">Core Implementation</h2>
+    <div class="skills-grid">
+        {% for skill in skills %}
+        <div class="glass-card">
+            <div class="skill-info">
+                <span>{{ skill.name }}</span>
+                <span>{{ skill.level }}%</span>
+            </div>
+            <div class="progress-bg">
+                <div class="progress-fill" data-width="{{ skill.level }}"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section id="featured-projects">
+    <h2 class="gradient-text">Featured Projects</h2>
+    <div class="projects-grid">
+        {% for project in projects %}
+        <div class="glass-card">
+            <h3>{{ project.name }}</h3>
+            <p style="color: var(--gray); margin-bottom: 1rem;">{{ project.tech }}</p>
+            <p>{{ project.description }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
