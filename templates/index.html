@@ -1,52 +1,40 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<section class="hero">
-    <div class="hero-content">
-        <h3 class="gradient-text">Hello, I'm</h3>
-        <h1 style="font-size: 4rem; line-height: 1.1;">{{ personal.name }}</h1>
-        <h2 style="color: var(--gray);">{{ personal.title }}</h2>
-        <p style="font-size: 1.2rem; margin: 1.5rem 0; color: var(--gray);">
+<div class="landing-hero">
+    <div class="profile-img-placeholder" style="margin: 0 auto 30px; border-color: var(--primary);">
+        <i class="fas fa-user-tie" style="color: var(--primary);"></i>
+    </div>
+    <h1 style="font-size: 3rem; margin-bottom: 10px;">{{ personal.name }}</h1>
+    <h2 style="color: var(--primary); font-weight: 500; margin-bottom: 20px;">{{ personal.title }}</h2>
+
+    <div style="max-width: 700px; margin: 0 auto;">
+        <p style="font-size: 1.2rem; color: var(--gray); margin-bottom: 30px;">
             {{ personal.summary }}
         </p>
-        <div style="display: flex; gap: 1rem;">
-            <a href="{{ url_for('document') }}" class="btn btn-primary">View Full Resume</a>
-            <a href="mailto:{{ personal.email }}" class="btn" style="border: 1px solid var(--glass-border);">Contact
-                Me</a>
-        </div>
     </div>
-    <div class="hero-image">
-        <i class="fas fa-user-tie"></i>
-    </div>
-</section>
 
-<section id="skills">
-    <h2 class="gradient-text">Core Implementation</h2>
-    <div class="skills-grid">
-        {% for skill in skills %}
-        <div class="glass-card">
-            <div class="skill-info">
-                <span>{{ skill.name }}</span>
-                <span>{{ skill.level }}%</span>
-            </div>
-            <div class="progress-bg">
-                <div class="progress-fill" data-width="{{ skill.level }}"></div>
-            </div>
-        </div>
-        {% endfor %}
+    <div class="hero-cta">
+        <a href="{{ url_for('document') }}" class="btn btn-primary">View Full Resume</a>
+        <a href="mailto:{{ personal.email }}" class="btn btn-outline">Hire Me Now</a>
     </div>
-</section>
 
-<section id="featured-projects">
-    <h2 class="gradient-text">Featured Projects</h2>
-    <div class="projects-grid">
-        {% for project in projects %}
-        <div class="glass-card">
-            <h3>{{ project.name }}</h3>
-            <p style="color: var(--gray); margin-bottom: 1rem;">{{ project.tech }}</p>
-            <p>{{ project.description }}</p>
+    <div style="margin-top: 60px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        <div style="padding: 20px;">
+            <i class="fas fa-code" style="font-size: 2rem; color: var(--accent-red); margin-bottom: 15px;"></i>
+            <h3>Web Development</h3>
+            <p style="font-size: 0.9rem; color: var(--gray);">150+ Professional Websites delivered globally.</p>
         </div>
-        {% endfor %}
+        <div style="padding: 20px;">
+            <i class="fas fa-robot" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+            <h3>Automation</h3>
+            <p style="font-size: 0.9rem; color: var(--gray);">WhatsApp Marketing & Desktop Software expert.</p>
+        </div>
+        <div style="padding: 20px;">
+            <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--accent); margin-bottom: 15px;"></i>
+            <h3>Marketing</h3>
+            <p style="font-size: 0.9rem; color: var(--gray);">Lead generation and business scaling strategy.</p>
+        </div>
     </div>
-</section>
+</div>
 {% endblock %}
