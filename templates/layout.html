@@ -1,42 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ personal.name }} | {{ title }}</title>
+    <title>{{ personal.name }} - Resume</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
+
 <body>
 
-    <div class="container">
-        <nav>
-            <div class="logo">Portfolio.</div>
-            <div class="nav-links">
-                <a href="{{ url_for('index') }}" class="{{ 'active' if title == 'Home' else '' }}">Home</a>
-                <a href="{{ url_for('document') }}" class="{{ 'active' if title == 'Full Resume' else '' }}">Resume Section</a>
-            </div>
-        </nav>
+    <nav class="top-nav">
+        <a href="{{ url_for('index') }}" class="{{ 'active' if title == 'Home' else '' }}">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a href="{{ url_for('document') }}" class="{{ 'active' if title == 'Resume' else '' }}">
+            <i class="fas fa-file-alt"></i> Resume Document
+        </a>
+    </nav>
 
+    <div class="container" id="resume-content">
         {% block content %}{% endblock %}
-
-        <footer>
-            <p>&copy; 2024 {{ personal.name }}. Built with Python & Flask.</p>
-        </footer>
     </div>
 
+    {% if title == 'Resume' %}
+    <button class="download-btn" onclick="downloadPDF()">
+        <i class="fas fa-download"></i> Download PDF
+    </button>
+    {% endif %}
+
     <script>
-        // Simple animation for progress bars when they come into view
-        document.addEventListener('DOMContentLoaded', () => {
-            const progressBars = document.querySelectorAll('.progress-fill');
-            progressBars.forEach(bar => {
-                const width = bar.getAttribute('data-width');
+        function downloadPDF() {
+            const element = document.getElementById('resume-content');
+            const opt = {
+                margin: 0,
+                filename: '{{ personal.name }}_Resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            const btn = document.querySelector('.download-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Done';
                 setTimeout(() => {
-                    bar.style.width = width + '%';
-                }, 500);
+                    btn.innerHTML = '<i class="fas fa-download"></i> Download PDF';
+                }, 2000);
             });
-        });
+        }
     </script>
 </body>
+
 </html>
