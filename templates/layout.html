@@ -4,53 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ personal.name }} - Resume</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{{ personal.name }} | {{ title }}</title>
+    <!-- Modern Font and Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
     <nav class="top-nav">
-        <a href="{{ url_for('index') }}" class="{{ 'active' if title == 'Home' else '' }}">
+        <a href="{{ url_for('index') }}" class="{{ 'active' if title == 'Professional Profile' else '' }}">
             <i class="fas fa-home"></i> Home
         </a>
-        <a href="{{ url_for('document') }}" class="{{ 'active' if title == 'Resume' else '' }}">
-            <i class="fas fa-file-alt"></i> Resume Document
+        <a href="{{ url_for('document') }}" class="{{ 'active' if title == 'Detailed Resume' else '' }}">
+            <i class="fas fa-file-contract"></i> Resume
         </a>
     </nav>
 
-    <div class="container" id="resume-content">
-        {% block content %}{% endblock %}
-    </div>
+    {% block content %}{% endblock %}
 
-    {% if title == 'Resume' %}
-    <button class="download-btn" onclick="downloadPDF()">
-        <i class="fas fa-download"></i> Download PDF
-    </button>
-    {% endif %}
+    <footer style="text-align: center; padding: 4rem 2rem; color: var(--text-muted); font-size: 0.9rem;">
+        <p>&copy; 2024 {{ personal.name }}. Built with Python & HTML.</p>
+    </footer>
 
+    <!-- html2pdf for Resume Download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
-        function downloadPDF() {
-            const element = document.getElementById('resume-content');
+        function downloadResume() {
+            const element = document.getElementById('resume-document');
             const opt = {
                 margin: 0,
                 filename: '{{ personal.name }}_Resume.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0f172a' },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-
-            const btn = document.querySelector('.download-btn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                btn.innerHTML = '<i class="fas fa-check"></i> Done';
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="fas fa-download"></i> Download PDF';
-                }, 2000);
-            });
+            html2pdf().set(opt).from(element).save();
         }
     </script>
 </body>

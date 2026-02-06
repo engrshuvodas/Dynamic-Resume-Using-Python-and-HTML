@@ -1,122 +1,96 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="resume-wrapper">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="profile-img-placeholder">
-            <i class="fas fa-user-tie"></i>
-        </div>
-        <h1>{{ personal.name }}</h1>
-        <div class="title-sub">{{ personal.title }}</div>
+<div class="container">
+    <div class="resume-grid" id="resume-document">
 
-        <div class="main-section">
-            <h3 class="section-title">Contact</h3>
-            <div class="sidebar-item"><i class="fas fa-phone"></i> {{ personal.phone }}</div>
-            <div class="sidebar-item"><i class="fas fa-envelope"></i> {{ personal.email }}</div>
-            <div class="sidebar-item"><i class="fas fa-map-marker-alt"></i> {{ personal.location }}</div>
-            <div class="sidebar-item"><i class="fas fa-globe"></i> {{ contact.website }}</div>
-        </div>
-
-        <div class="main-section">
-            <h3 class="section-title">Skills</h3>
-            {% for skill in skills %}
-            <div class="skill-item">
-                <div class="skill-info">
-                    <span>{{ skill.name }}</span>
-                    <span>{{ skill.level }}%</span>
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile-card">
+                <div class="avatar">
+                    <i class="fas fa-user-tie"></i>
                 </div>
-                <div class="skill-bar">
-                    <div class="skill-progress" style="width: {{ skill.level }}%"></div>
+                <h3>{{ personal.name }}</h3>
+                <p style="color: var(--primary); font-size: 0.9rem; font-weight: 600;">{{ personal.title }}</p>
+            </div>
+
+            <div class="sidebar-section">
+                <h4 class="sidebar-title">Contact</h4>
+                <div class="info-item"><i class="fas fa-envelope"></i> {{ personal.email }}</div>
+                <div class="info-item"><i class="fas fa-phone"></i> {{ personal.phone }}</div>
+                <div class="info-item"><i class="fas fa-location-dot"></i> {{ personal.location }}</div>
+                <div class="info-item"><i class="fas fa-globe"></i> {{ personal.website }}</div>
+            </div>
+
+            <div class="sidebar-section">
+                <h4 class="sidebar-title">Social</h4>
+                <div class="info-item"><i class="fab fa-github"></i> {{ personal.github }}</div>
+                <div class="info-item"><i class="fab fa-linkedin"></i> {{ personal.linkedin }}</div>
+            </div>
+
+            <div class="sidebar-section">
+                <h4 class="sidebar-title">Availability</h4>
+                <div class="info-item" style="color: #4ade80;">
+                    <i class="fas fa-circle-check"></i> {{ contact.availability }}
                 </div>
             </div>
-            {% endfor %}
-        </div>
+        </aside>
 
-        <div class="main-section">
-            <h3 class="section-title">Languages</h3>
-            {% for lang in languages %}
-            <div class="sidebar-item" style="justify-content: space-between;">
-                <span>{{ lang.name }}</span>
-                <span style="color: var(--accent); font-weight: 600;">{{ lang.level }}</span>
-            </div>
-            {% endfor %}
-        </div>
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
 
-        <div class="main-section">
-            <h3 class="section-title">Hobbies</h3>
-            <ul style="list-style: none; font-size: 14px; color: var(--sidebar-text);">
-                {% for hobby in hobbies %}
-                <li style="margin-bottom: 8px;"><i class="fas fa-heart"
-                        style="color: var(--accent); margin-right: 10px;"></i> {{ hobby }}</li>
+            <section class="content-section">
+                <h2 class="section-header">Professional Experience</h2>
+                {% for job in experience %}
+                <div class="timeline-item">
+                    <div class="item-title">{{ job.role }}</div>
+                    <div class="item-meta">{{ job.company }} | {{ job.period }}</div>
+                    <p class="item-desc" style="margin-bottom: 1rem;">{{ job.description }}</p>
+                    <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.85rem;">
+                        {% for achievement in job.achievements %}
+                        <li>{{ achievement }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 {% endfor %}
-            </ul>
-        </div>
-    </aside>
+            </section>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="main-section">
-            <h2>Profile</h2>
-            <p style="text-align: justify; font-size: 14px; color: #555;">{{ personal.summary }}</p>
-        </div>
-
-        <div class="main-section">
-            <h2>Professional Experience</h2>
-            {% for job in experience %}
-            <div class="experience-item">
-                <div class="exp-header">
-                    <div>
-                        <div class="job-title">{{ job.role }}</div>
-                        <div class="company">{{ job.company }}</div>
-                    </div>
-                    <div class="duration">{{ job.period }}</div>
+            <section class="content-section">
+                <h2 class="section-header">Academic Background</h2>
+                {% for edu in education %}
+                <div class="timeline-item">
+                    <div class="item-title">{{ edu.degree }}</div>
+                    <div class="item-meta">{{ edu.institution }} | {{ edu.year }}</div>
+                    <p class="item-desc">{{ edu.details }}</p>
                 </div>
-                <ul class="exp-points">
-                    {% for point in job.points %}
-                    <li>{{ point }}</li>
+                {% endfor %}
+            </section>
+
+            <section class="content-section">
+                <h2 class="section-header">Featured Projects</h2>
+                <div class="projects-grid">
+                    {% for project in projects %}
+                    <div class="project-card">
+                        <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">{{ project.name
+                            }}</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">{{
+                            project.description }}</p>
+                        {% if project.link != "#" %}
+                        <a href="{{ project.link }}" target="_blank"
+                            style="font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 600;">View
+                            Project <i class="fas fa-external-link-alt"></i></a>
+                        {% endif %}
+                    </div>
                     {% endfor %}
-                </ul>
-            </div>
-            {% endfor %}
-        </div>
-
-        <div class="main-section">
-            <h2>Education</h2>
-            {% for edu in education %}
-            <div class="experience-item">
-                <div class="exp-header">
-                    <div>
-                        <div class="job-title">{{ edu.degree }}</div>
-                        <div class="company">{{ edu.institution }}</div>
-                    </div>
-                    <div class="duration">{{ edu.year }}</div>
                 </div>
-                <p style="font-size: 14px; color: #555;">{{ edu.description }}</p>
-            </div>
-            {% endfor %}
-        </div>
+            </section>
 
-        <div class="main-section">
-            <h2>Services & Expertise</h2>
-            <div style="font-size: 14px;">
-                {% for service in services %}
-                <p style="margin-bottom: 10px;">
-                    <strong>{{ service.title }}:</strong> {{ service.desc }}
-                </p>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="main-section">
-            <h2>Client Testimonials</h2>
-            {% for t in testimonials %}
-            <div style="margin-bottom: 15px; border-left: 2px solid var(--primary); padding-left: 15px;">
-                <p style="font-style: italic; font-size: 13px; margin-bottom: 5px;">"{{ t.text }}"</p>
-                <div style="font-size: 12px; font-weight: 700;">{{ t.client }} - {{ t.role }} ({{ t.location }})</div>
-            </div>
-            {% endfor %}
-        </div>
-    </main>
+        </main>
+    </div>
 </div>
+
+<!-- Floating Action Button for PDF -->
+<button class="fab" onclick="downloadResume()" title="Download PDF">
+    <i class="fas fa-download"></i>
+</button>
 {% endblock %}
