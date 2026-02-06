@@ -1,505 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engr. Shuvo Das - Professional Resume</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ resume.name }} - {{ resume.title }}</title>
+    <link rel="stylesheet" href="static/style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Calibri', 'Arial', sans-serif;
-            background: #f8f9fa;
-            padding: 20px;
-            line-height: 1.5;
-            color: #2c3e50;
-        }
-
-        .resume-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            min-height: 900px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .sidebar {
-            width: 320px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
-            position: relative;
-        }
-
-        .sidebar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 40px 50px;
-            background: #ffffff;
-        }
-
-        .profile-section {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .profile-img {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.3);
-            margin-bottom: 20px;
-            background: url('Shuvo.jpg') center center/cover;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            object-fit: cover;
-            background-position: center center;
-        }
-
-        .name {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            line-height: 1.2;
-        }
-
-        .title {
-            font-size: 14px;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 25px;
-            font-weight: 500;
-            line-height: 1.4;
-        }
-
-        .contact-info {
-            margin-bottom: 30px;
-        }
-
-        .contact-item {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-        }
-
-        .contact-item::before {
-            content: '▶';
-            color: #f093fb;
-            margin-right: 10px;
-            font-size: 10px;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.95);
-            border-bottom: 2px solid #f093fb;
-            padding-bottom: 8px;
-        }
-
-        .skills-list {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-
-        .skills-list li {
-            margin-bottom: 12px;
-            font-size: 14px;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .skills-list li::before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: #f093fb;
-        }
-
-        .skill-bar {
-            height: 6px;
-            background: #34495e;
-            border-radius: 3px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .skill-progress {
-            height: 100%;
-            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
-            border-radius: 3px;
-        }
-
-        .main-section {
-            margin-bottom: 40px;
-        }
-
-        .main-section h2 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #667eea;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 8px;
-        }
-
-        .profile-text {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 20px;
-            text-align: justify;
-            line-height: 1.6;
-        }
-
-        .experience-item, .education-item {
-            margin-bottom: 25px;
-        }
-
-        .exp-header, .edu-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .job-title, .degree {
-            font-size: 15px;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-
-        .company, .school {
-            font-size: 13px;
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .duration {
-            font-size: 13px;
-            color: #7f8c8d;
-            font-style: italic;
-        }
-
-        .exp-description, .edu-description {
-            font-size: 14px;
-            color: #555;
-            margin-top: 8px;
-        }
-
-        .reference-item {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .reference-item:last-child {
-            border-bottom: none;
-        }
-
-        .ref-name {
-            font-size: 15px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-
-        .ref-position {
-            font-size: 13px;
-            color: #667eea;
-            margin-bottom: 3px;
-        }
-
-        .ref-company {
-            font-size: 13px;
-            color: #7f8c8d;
-            margin-bottom: 8px;
-        }
-
-        .ref-contact {
-            font-size: 13px;
-            color: #555;
-        }
-
-        .language-list {
-            list-style: none;
-        }
-
-        .language-list li {
-            margin-bottom: 10px;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .lang-level {
-            color: #f093fb;
-            font-weight: 600;
-        }
-
-        .hobbies-list {
-            list-style: none;
-        }
-
-        .hobbies-list li {
-            margin-bottom: 8px;
-            font-size: 14px;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .hobbies-list li::before {
-            content: '♥';
-            position: absolute;
-            left: 0;
-            color: #f093fb;
-        }
-
-        .download-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .download-btn:hover {
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .download-btn:active {
-            transform: translateY(0);
-        }
-
-        @media print {
-            .download-btn {
-                display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .resume-container {
-                flex-direction: column;
-            }
-            
-            .sidebar, .main-content {
-                width: 100%;
-            }
-            
-            .sidebar::after {
-                display: none;
-            }
-        }
+        /* Minimal fallback styles to keep template readable even without static CSS */
+        body{font-family:Segoe UI, Arial, sans-serif;color:#222;padding:24px}
+        header h1{margin:0;font-size:28px}
+        header p{margin:6px 0;color:#555}
+        section{margin-top:18px}
+        h2{font-size:16px;color:#333;margin-bottom:8px}
+        ul{margin:8px 0 0 18px}
+        .meta{color:#666;font-size:13px}
+        .how{margin-top:18px;padding:10px;background:#f5f5f5;border-radius:6px;font-size:13px;color:#333}
+        a{color:#1a73e8}
     </style>
 </head>
 <body>
-    <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
-    
-    <div class="resume-container" id="resume">
-        <div class="sidebar">
-            <div class="profile-section">
-                <div class="profile-img"></div>
-                <div class="name">Engr. Shuvo Das</div>
-                <div class="title">Software Engineer | Digital Marketer</div>
-            </div>
+    <header>
+        <h1>{{ resume.name }}</h1>
+        <p class="meta">{{ resume.title }}</p>
+        <p class="meta">{{ resume.contact.email }} · {{ resume.contact.phone }} · {{ resume.contact.location }}</p>
+    </header>
 
-            <div class="contact-info">
-                <div class="section-title">Contact</div>
-                <div class="contact-item">+880 1765-245872</div>
-                <div class="contact-item">engrshuvoda@gmail.com</div>
-                <div class="contact-item">Gujarat, India</div>
-                <div class="contact-item">Available for Global Projects</div>
-            </div>
+    <main>
+        <section id="summary">
+            <h2>Summary</h2>
+            <p>{{ resume.summary }}</p>
+        </section>
 
-            <div class="skills-section">
-                <div class="section-title">Skills</div>
-                <ul class="skills-list">
-                    <li>WhatsApp Marketing Software<div class="skill-bar"><div class="skill-progress" style="width: 95%"></div></div></li>
-                    <li>WordPress<div class="skill-bar"><div class="skill-progress" style="width: 90%"></div></div></li>
-                    <li>Web Design<div class="skill-bar"><div class="skill-progress" style="width: 80%"></div></div></li>
-                    <li>Web Development<div class="skill-bar"><div class="skill-progress" style="width: 70%"></div></div></li>
-                    <li>Business Marketing Consulting<div class="skill-bar"><div class="skill-progress" style="width: 85%"></div></div></li>
-                    <li>Digital Marketing<div class="skill-bar"><div class="skill-progress" style="width: 75%"></div></div></li>
+        <section id="skills">
+            <h2>Skills</h2>
+            <ul>
+                {% for skill in resume.skills %}
+                <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section id="experience">
+            <h2>Experience</h2>
+            {% for job in resume.experience %}
+            <article>
+                <strong>{{ job.title }}</strong> — <span class="meta">{{ job.company }}</span>
+                <div class="meta">{{ job.duration }}</div>
+                <ul>
+                    {% for point in job.description %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
                 </ul>
-            </div>
+            </article>
+            {% endfor %}
+        </section>
 
-            <div class="languages-section">
-                <div class="section-title">Languages</div>
-                <ul class="language-list">
-                    <li>Bengali <span class="lang-level">Native</span></li>
-                    <li>English <span class="lang-level">Professional</span></li>
-                    <li>Hindi <span class="lang-level">Intermediate</span></li>
+        <section id="education">
+            <h2>Education</h2>
+            {% for ed in resume.education %}
+            <article>
+                <strong>{{ ed.degree }}</strong> — <span class="meta">{{ ed.school }}</span>
+                <div class="meta">{{ ed.duration }}</div>
+                <p>{{ ed.description }}</p>
+            </article>
+            {% endfor %}
+        </section>
+
+        <section class="how-it-works">
+            <h2>How this works</h2>
+            <div class="how">
+                The page is rendered by Python using a `resume` dictionary. Keys are accessed as template variables, for example:
+                <ul>
+                    <li><code>{{ '{{ resume.name }}' }}</code> — outputs the candidate's name.</li>
+                    <li><code>{{ "{{ resume['contact']['email'] }}" }}</code> — alternative key-style access for nested data.</li>
                 </ul>
+                The Python backend loads the dictionary and passes it when rendering the template (e.g. render_template('resume.html', resume=resume)).
             </div>
-
-            <div class="hobbies-section">
-                <div class="section-title">Hobbies</div>
-                <ul class="hobbies-list">
-                    <li>Software Development</li>
-                    <li>Digital Innovation</li>
-                    <li>Marketing Research</li>
-                    <li>Technology Trends</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="main-section">
-                <h2>Profile</h2>
-                <p class="profile-text">
-                    Results-driven Software Engineer with 8+ years of experience specializing in web development and desktop software solutions. Built 150+ websites for clients across 80+ countries, with expertise in WhatsApp Marketing Software development. Combining technical excellence with digital marketing strategies to deliver impactful business solutions. Proven track record in developing custom automation tools and scaling marketing operations for global clients.
-                </p>
-            </div>
-
-            <div class="main-section">
-                <h2>Professional Experience</h2>
-                <div class="experience-item">
-                    <div class="exp-header">
-                        <div>
-                            <div class="job-title">Software Engineer & Digital Marketing Consultant</div>
-                            <div class="company">Freelance | Global Clients</div>
-                        </div>
-                        <div class="duration">2016 - Present</div>
-                    </div>
-                    <div class="exp-description">
-                        • Developed 150+ professional websites for clients in 80+ countries<br>
-                        • Built custom WhatsApp Marketing Software with automation capabilities<br>
-                        • Created desktop-based marketing tools for Windows & macOS<br>
-                        • Provided digital marketing consulting and lead generation solutions<br>
-                        • Achieved 95% client satisfaction rate with repeat business partnerships
-                    </div>
-                </div>
-
-                <div class="experience-item">
-                    <div class="exp-header">
-                        <div>
-                            <div class="job-title">Web Development Specialist</div>
-                            <div class="company">Tech Solutions Company</div>
-                        </div>
-                        <div class="duration">2014 - 2016</div>
-                    </div>
-                    <div class="exp-description">
-                        • Specialized in WordPress development and custom web applications<br>
-                        • Implemented responsive design and SEO optimization strategies<br>
-                        • Collaborated with marketing teams to enhance online presence<br>
-                        • Developed custom plugins and themes for specific client needs
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-section">
-                <h2>Education</h2>
-                <div class="education-item">
-                    <div class="edu-header">
-                        <div>
-                            <div class="degree">B.Tech in Computer Science & Engineering</div>
-                            <div class="school">Parul University, India</div>
-                        </div>
-                        <div class="duration">2010 - 2014</div>
-                    </div>
-                    <div class="edu-description">
-                        Specialized in Software Engineering and Web Development. Graduated with honors, focusing on modern web technologies and software architecture.
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-section">
-                <h2>Services & Expertise</h2>
-                <div class="experience-item">
-                    <div class="exp-description">
-                        <strong>Web Design & Development:</strong> Modern, high-quality professional websites with responsive design<br><br>
-                        <strong>Desktop Applications:</strong> Custom Windows & macOS marketing tools and automation software<br><br>
-                        <strong>WhatsApp Marketing Solutions:</strong> Automation, lead extraction, and scaling tools for businesses<br><br>
-                        <strong>Digital Marketing:</strong> Online presence growth strategies and targeted B2B lead generation<br><br>
-                        <strong>Business Consulting:</strong> Marketing technology integration and process optimization
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-section">
-                <h2>Client Testimonials</h2>
-                <div class="reference-item">
-                    <div class="ref-name">Global Technology Firm</div>
-                    <div class="ref-position">CEO</div>
-                    <div class="ref-company">United States</div>
-                    <div class="ref-contact">"Exceptional WhatsApp marketing software that scaled our operations 300%"</div>
-                </div>
-
-                <div class="reference-item">
-                    <div class="ref-name">E-commerce Platform</div>
-                    <div class="ref-position">Marketing Director</div>
-                    <div class="ref-company">United Kingdom</div>
-                    <div class="ref-contact">"Custom web solutions delivered on time with outstanding results"</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function downloadPDF() {
-            const element = document.getElementById('resume');
-            const opt = {
-                margin: 10,
-                filename: 'resume.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            // Show loading state
-            const btn = document.querySelector('.download-btn');
-            const originalText = btn.textContent;
-            btn.textContent = 'Generating...';
-            btn.disabled = true;
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Restore button state
-                btn.textContent = originalText;
-                btn.disabled = false;
-            }).catch((error) => {
-                console.error('Error generating PDF:', error);
-                btn.textContent = 'Error - Try Again';
-                btn.disabled = false;
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 2000);
-            });
-        }
-    </script>
+            <p style="margin-top:8px">Open the full document for details: <a href="/document">Detailed resume</a></p>
+        </section>
+    </main>
 </body>
 </html>
+        .title {
