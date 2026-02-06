@@ -11,6 +11,8 @@ resume_data = {
         "location": "Gujarat, India",
         "summary": "Innovative Software Engineer with over 8 years of experience in building high-performance web applications and automation tools. Specialist in WhatsApp marketing software and custom desktop solutions. Proven track record of delivering 150+ successful projects for global clients.",
         "profile_img": "Shuvo.jpg",
+        # set to the static image path used by the template
+        "profile_img": "/static/images/profile.jpg",
         "github": "github.com/engrshuvodas",
         "linkedin": "linkedin.com/in/engrshuvodas",
         "website": "www.shuvodas.com"

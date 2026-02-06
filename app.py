@@ -6,16 +6,124 @@ app = Flask(__name__)
 
 # --- ROUTE HANDLERS ---
 
-@app.route('/')
 def index():
     """ 
     Renders the main landing page (Home).
     Passes 'personal' and 'skills' data to the template.
     """
-    return render_template('index.html', 
-                           title="Professional Profile",
-                           personal=resume_data['personal_info'],
-                           skills=resume_data['skills'])
+@app.route('/')
+def index():
+    """
+    Render a simple resume-focused page (not a portfolio).
+    We assemble a single `resume` dictionary from `resume_data` and pass it
+    to `resume.html` so the template can access fields like `resume.name`.
+    """
+    personal = resume_data.get('personal_info', {})
+
+    # Convert skills into a simple list of names for the simple resume template
+    skills = [s.get('name') if isinstance(s, dict) else str(s) for s in resume_data.get('skills', [])]
+
+    # Normalize experience entries for the simple resume template
+    experience = []
+    for e in resume_data.get('experience', []):
+        item = {
+            'title': e.get('role') or e.get('title'),
+            'company': e.get('company'),
+            'duration': e.get('period') or e.get('duration'),
+            'description': []
+        }
+        # primary description (string)
+        if e.get('description'):
+            item['description'].append(e.get('description'))
+        # achievements (list of strings)
+        for a in e.get('achievements', []):
+            item['description'].append(a)
+        experience.append(item)
+
+    # Normalize education
+    education = []
+    for ed in resume_data.get('education', []):
+        education.append({
+            'degree': ed.get('degree'),
+            'school': ed.get('institution') or ed.get('school'),
+            'duration': ed.get('year') or ed.get('duration'),
+            'description': ed.get('details') or ed.get('description') or ''
+        })
+
+    resume = {
+        'name': personal.get('name'),
+        'title': personal.get('title'),
+        'summary': personal.get('summary'),
+        'contact': {
+            'email': personal.get('email'),
+            'phone': personal.get('phone'),
+            'location': personal.get('location')
+        },
+        'skills': skills,
+        'profile_img': personal.get('profile_img') or '/static/images/profile.jpg',
+        # optional fields that may exist in data.py
+        'languages': resume_data.get('languages', []),
+        'hobbies': resume_data.get('hobbies', []),
+        'services': resume_data.get('services', []),
+        'testimonials': resume_data.get('testimonials', []),
+        'skill_levels': resume_data.get('skill_levels', {}),
+        'experience': experience,
+        'education': education
+    }
+
+    return render_template('resume.html', resume=resume)
+
+
+@app.route('/debug-resume')
+def debug_resume():
+    """Return the assembled `resume` dictionary as JSON for debugging."""
+    from flask import jsonify
+    personal = resume_data.get('personal_info', {})
+    skills = [s.get('name') if isinstance(s, dict) else str(s) for s in resume_data.get('skills', [])]
+    experience = []
+    for e in resume_data.get('experience', []):
+        item = {
+            'title': e.get('role') or e.get('title'),
+            'company': e.get('company'),
+            'duration': e.get('period') or e.get('duration'),
+            'description': []
+        }
+        if e.get('description'):
+            item['description'].append(e.get('description'))
+        for a in e.get('achievements', []):
+            item['description'].append(a)
+        experience.append(item)
+
+    education = []
+    for ed in resume_data.get('education', []):
+        education.append({
+            'degree': ed.get('degree'),
+            'school': ed.get('institution') or ed.get('school'),
+            'duration': ed.get('year') or ed.get('duration'),
+            'description': ed.get('details') or ed.get('description') or ''
+        })
+
+    resume = {
+        'name': personal.get('name'),
+        'title': personal.get('title'),
+        'summary': personal.get('summary'),
+        'contact': {
+            'email': personal.get('email'),
+            'phone': personal.get('phone'),
+            'location': personal.get('location')
+        },
+        'skills': skills,
+        'profile_img': personal.get('profile_img') or '/static/images/profile.jpg',
+        'languages': resume_data.get('languages', []),
+        'hobbies': resume_data.get('hobbies', []),
+        'services': resume_data.get('services', []),
+        'testimonials': resume_data.get('testimonials', []),
+        'skill_levels': resume_data.get('skill_levels', {}),
+        'experience': experience,
+        'education': education
+    }
+
+    return jsonify(resume)
 
 @app.route('/document')
 def document():
